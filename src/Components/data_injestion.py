@@ -9,6 +9,8 @@ from src.logger import logging
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
+from src.Components.data_transform import DataTransformation
+from src.Components.data_transform import DataTransformationConfig
 
 @dataclass
 class DataIngestionConfig:
@@ -50,5 +52,16 @@ class DataInjestion:
         
 if __name__=="__main__":
     obj=DataInjestion()
-    obj.initiate_data_ingestion()
+    train_data,test_data=obj.initiate_data_ingestion()#Data injestion contains train as well as test data so we are storing them on train and test
+    data_transformation=DataTransformation()
+    data_transformation.initiate_data_transformation(train_data,test_data)#applying the transformation on train and test data.
+    import sys
+    sys.setrecursionlimit(10000)
+
+'''
+So artifact file would be created where there would be 3 files.
+1.data.csv
+2.test.csv
+3.train.csv
+'''
 
