@@ -43,8 +43,47 @@ class ModelTrainer:
                 "AdaBoost Regressor": AdaBoostRegressor(),
                  }#we are going to try each and every model and select the best model based on its performance metrics
             
-            model_report:dict=evaluate_model(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
-                                             models=models)#So we will create this function inside utils.py and we will pass 5 parameters
+            #we are creating dictionary of hyperparameters for hyperparameter tuning purpose
+            params={
+                "Decision Tree": {#hyperparameters for decision tree
+                    'criterion':['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
+                    # 'splitter':['best','random'],
+                    # 'max_features':['sqrt','log2'],
+                },
+                "Random Forest":{#hyperparameters for Random Forest
+                    # 'criterion':['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
+                 
+                    # 'max_features':['sqrt','log2',None],
+                    'n_estimators': [8,16,32,64,128,256]
+                },
+                "Gradient Boosting":{#hyperparameters for Gradient Boosting
+                    # 'loss':['squared_error', 'huber', 'absolute_error', 'quantile'],
+                    'learning_rate':[.1,.01,.05,.001],
+                    'subsample':[0.6,0.7,0.75,0.8,0.85,0.9],
+                    # 'criterion':['squared_error', 'friedman_mse'],
+                    # 'max_features':['auto','sqrt','log2'],
+                    'n_estimators': [8,16,32,64,128,256]
+                },
+                 "Linear Regression":{},
+                "XGBRegressor":{#hyperparameters for XGBRegressor
+                    'learning_rate':[.1,.01,.05,.001],
+                    'n_estimators': [8,16,32,64,128,256]
+                },
+                "CatBoosting Regressor":{#hyperparameters for CatBoosting Regressor
+                    'depth': [6,8,10],
+                    'learning_rate': [0.01, 0.05, 0.1],
+                    'iterations': [30, 50, 100]
+                },
+                "AdaBoost Regressor":{#hyperparameters for AdaBoost Regressor
+                    'learning_rate':[.1,.01,0.5,.001],
+                    # 'loss':['linear','square','exponential'],
+                    'n_estimators': [8,16,32,64,128,256]
+                }
+                
+            }
+            #give all these hyperparameters to evaluate_models function for hyperparameter tuning
+            model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
+                                             models=models,param=params)#So we will create this function inside utils.py and we will pass 5 parameters
             #X_train,X_test,y_train,y_test and the model these are the parameters we are giving to the model.
             #The model in return will return the performance metrics of all model.
 

@@ -48,7 +48,7 @@ class DataTransformation:
 
             categorical_pipeline=Pipeline(
                 steps=[("imputer",SimpleImputer(strategy='most_frequent')),
-                       ('one_hot_encoder',OneHotEncoder()),
+                       ('one_hot_encoder',OneHotEncoder(handle_unknown='ignore')),
                        ('scaler',StandardScaler(with_mean=False))]
             )#there are 3 transformation applied on categorical columns 
             # first is SimpleImputer which will substitute null values with most_frequent values i.e mode
@@ -99,8 +99,8 @@ class DataTransformation:
             input_feature_train_arr=preprocessing_obj.fit_transform(input_feature_train_df)#Applying transformation on train data
             input_feature_test_arr=preprocessing_obj.transform(input_feature_test_df)#Applying transformation on test data.
 
-            train_arr=np.hstack((input_feature_train_arr , np.array(target_feature_train_df)))#this will contain training input data and training target data
-            test_arr=np.hstack((input_feature_test_arr , np.array(target_feature_test_df)))#This will contain testing input data and testing o/p data
+            train_arr=np.c_[input_feature_train_arr , np.array(target_feature_train_df)]#this will contain training input data and training target data
+            test_arr=np.c_[input_feature_test_arr , np.array(target_feature_test_df)]#This will contain testing input data and testing o/p data
             #hstack is used to combine matrix with different dimensions.
              
             #train_arr and test_arr would be in the form of numpy array.
